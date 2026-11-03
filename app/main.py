@@ -6,8 +6,7 @@ from sqlalchemy.orm import Session
 
 from app import models  # noqa: F401  (registers the tables on Base)
 from app.database import Base, engine, get_db
-from app.routers import auth, wallet
-from app.routers import auth, transfers, wallet
+from app.routers import auth, notifications, transactions, transfers, wallet
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
@@ -19,6 +18,8 @@ app = FastAPI(title="PayFlow", version="0.1.0", lifespan=lifespan)
 app.include_router(auth.router)
 app.include_router(wallet.router)
 app.include_router(transfers.router)
+app.include_router(transactions.router)
+app.include_router(notifications.router)
 
 @app.get("/health", tags=["health"])
 def health(db: Session = Depends(get_db)):
