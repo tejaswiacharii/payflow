@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
@@ -25,3 +25,11 @@ class LoginRequest(BaseModel):
 class TokenOut(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class WalletOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    balance: Decimal
+    currency: str
+    created_at: datetime
