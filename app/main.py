@@ -1,3 +1,5 @@
+import os
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from fastapi.responses import RedirectResponse
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -15,6 +17,19 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="PayFlow", version="0.1.0", lifespan=lifespan)
+allowed_origins = [
+    o.strip()
+    for o in os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
+    if o.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
+    expose_headers=["Idempotent-Replayed"],
+)
 app.include_router(auth.router)
 app.include_router(wallet.router)
 app.include_router(transfers.router)
