@@ -15,3 +15,13 @@ class UserOut(BaseModel):
     id: int
     email: EmailStr
     created_at: datetime
+
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(max_length=72)
+
+
+class TokenOut(BaseModel):
+    access_token: str
+    token_type: str = "bearer"

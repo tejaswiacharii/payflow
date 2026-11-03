@@ -15,3 +15,9 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(title="PayFlow", version="0.1.0", lifespan=lifespan)
 app.include_router(auth.router)
+from fastapi.responses import RedirectResponse
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/docs")
