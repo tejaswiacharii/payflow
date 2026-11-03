@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-
+from fastapi.responses import RedirectResponse
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -21,6 +21,9 @@ app.include_router(transfers.router)
 app.include_router(transactions.router)
 app.include_router(notifications.router)
 
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/docs")
 @app.get("/health", tags=["health"])
 def health(db: Session = Depends(get_db)):
     try:
