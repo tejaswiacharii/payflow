@@ -33,3 +33,21 @@ class WalletOut(BaseModel):
     balance: Decimal
     currency: str
     created_at: datetime
+
+class TransferCreate(BaseModel):
+    receiver_id: int = Field(gt=0)
+    amount: Decimal = Field(gt=0, max_digits=16, decimal_places=2, allow_inf_nan=False)
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+
+
+class TransactionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    sender_id: int
+    receiver_id: int
+    amount: Decimal
+    currency: str
+    status: str
+    idempotency_key: str
+    created_at: datetime
